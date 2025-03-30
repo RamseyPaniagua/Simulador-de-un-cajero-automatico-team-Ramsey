@@ -1,112 +1,158 @@
-funcion consultar(monto)
-	escribir "monto"
-	monto = "1,000,000"
-
-FinFuncion
-
-
-
-funcion depositar(cantidad)
-	escribir "introdusca el dinero a depositar"
-	
-FinFuncion
-
-
-
-funcion retirar(x)
-	
-FinFuncion
-
-
-funcion transferir_dinero
-	
-FinFuncion
-
-
-
-
-Algoritmo Simulador_de_un_cajero_automatico_team_Ramsey
-    Definir codigo_secreto, intentos, opcion Como Entero
-    Definir acceso_concedido Como Logico
-    Definir tarjeta Como Cadena
-    
-    acceso_concedido <- Falso
-    intentos <- 0
-    
-    Escribir "Inserte la tarjeta"
-    Leer tarjeta  
-	
+SubProceso Menu(posicion, saldos Por Referencia, historial Por Referencia)
+    Definir opcion, monto Como Real
     Repetir
-        intentos <- intentos + 1
-		
-        Escribir "Intento ", intentos, " de 3 - Ingrese el codigo secreto:"
-		
-        Leer codigo_secreto
-		
-        
-        Si codigo_secreto = 1234 Entonces
-			
-            acceso_concedido <- Verdadero
-			
-            Escribir "Codigo correcto. Acceso concedido."
-			
-        Sino
-			
-            Si intentos < 3 Entonces
-				
-                Escribir "Codigo incorrecto. Le quedan ", 3-intentos, " intentos."
-				
-                Escribir ""
-				
-            FinSi
-			
-        FinSi
-		
-    Hasta Que acceso_concedido O intentos = 3
-    
-    Si NO acceso_concedido Entonces
-		
-        Escribir "Demasiados intentos fallidos. Tarjeta bloqueada."
-		
-    Sino
-        Dimension menu[2,3]  
-        menu[0,0] <- "1. Consultar saldo"
-        menu[0,1] <- "2. Depositar dinero"
-        menu[0,2] <- "3. Retirar dinero"
-        menu[1,0] <- "4. Historial de transacciones"
-        menu[1,1] <- "5. Transferir fondos"
-        menu[1,2] <- "6. Salir"
-        
-        Escribir ""
-		
-        Escribir "----- MENÚ PRINCIPAL -----"
-		
-        Para i <- 0 Hasta 1 Hacer
-			
-            Para j <- 0 Hasta 2 Hacer
-				
-                Escribir Sin Saltar menu[i,j], "   "
-				
-            FinPara
-			
-            Escribir ""
-			
-        FinPara
-        
-        Escribir "------------------------------"
-		
-        Escribir "Seleccione una opcion (1-6): "
-		
+        Escribir "------------------------------------"
+        Escribir "          MENU DE OPCIONES         "
+        Escribir "------------------------------------"
+        Escribir "1. Consultar saldo"
+        Escribir "2. Depositar"
+        Escribir "3. Retirar"
+        Escribir "4. Historial de transacciones"
+        Escribir "5. Salir"
+        Escribir "Seleccione una opción:"
         Leer opcion
         
-        Si opcion >= 1 Y opcion <= 6 Entonces
-			
-            Escribir "Ha seleccionado: ", menu[(opcion-1) / 3, (opcion-1) % 3]
-			
-        Sino
-			
-            Escribir "Opción invalida."
-			
+        Segun opcion Hacer
+            1: 
+                Escribir "Su saldo actual es: $", ConsultarSaldo(saldos[posicion])
+            2: 
+                Escribir "Ingrese el monto a depositar:"
+                Leer monto
+                saldos[posicion] <- Depositar(saldos[posicion], monto, historial, posicion)
+            3: 
+                Escribir "Ingrese el monto a retirar:"
+                Leer monto
+                saldos[posicion] <- Retirar(saldos[posicion], monto, historial, posicion)
+            4: 
+                MostrarHistorialOperaciones(historial, posicion)
+            5: 
+                Escribir "Gracias por usar el cajero. ¡Hasta pronto!"
+        FinSegun
+    Hasta Que opcion = 5
+FinSubProceso
+
+Funcion saldo <- ConsultarSaldo(saldo)
+    saldo <- saldo
+FinFuncion
+
+Funcion nuevoSaldo <- Depositar(saldo, monto, historial Por Referencia, posicion)
+    nuevoSaldo <- saldo + monto
+    Escribir "Depósito exitoso. Su nuevo saldo es: $", nuevoSaldo
+    RegistrarTransaccion(historial, posicion, "Depósito", monto)
+    Devolver = nuevoSaldo
+FinFuncion
+
+Funcion nuevoSaldo <- Retirar(saldo, monto, historial Por Referencia, posicion)
+    Si monto > saldo Entonces
+        Escribir "Fondos insuficientes. No se pudo realizar el retiro."
+        nuevoSaldo <- saldo
+    Sino
+        nuevoSaldo <- saldo - monto
+        Escribir "Retiro exitoso. Su nuevo saldo es: $", nuevoSaldo
+        RegistrarTransaccion(historial, posicion, "Retiro", monto)
+    FinSi
+    Devolver = nuevoSaldo
+FinFuncion
+
+SubProceso RegistrarTransaccion(historial Por Referencia, posicion, tipo, monto)
+    Definir i Como Entero
+    Definir encontradoVacio Como Logico
+    encontradoVacio <- Falso
+    
+    Para i <- 0 Hasta 9 Hacer
+        Si historial[posicion, i] = "" Entonces
+            historial[posicion, i] <- tipo + ": $" + ConvertirATexto(monto)
+            encontradoVacio <- Verdadero
+            i <- 9 
         FinSi
+    FinPara
+    
+    Si no encontradoVacio Entonces
+        Para i <- 0 Hasta 8 Hacer
+            historial[posicion, i] <- historial[posicion, i+1]
+        FinPara
+        historial[posicion, 9] <- tipo + ": $" + ConvertirATexto(monto)
+    FinSi
+FinSubProceso
+
+SubProceso MostrarHistorialOperaciones(historial Por Referencia, posicion)
+    Definir i, contador Como Entero
+    contador <- 1
+    
+    Escribir "------------------------------------"
+    Escribir "   HISTORIAL DE TRANSACCIONES"
+    Escribir "------------------------------------"
+    
+    Para i <- 0 Hasta 9 Hacer
+        Si historial[posicion, i] <> "" Entonces
+            Escribir contador, ". ", historial[posicion, i]
+            contador <- contador + 1
+        FinSi
+    FinPara
+    
+    Si contador = 1 Entonces
+        Escribir "No hay transacciones registradas"
+    FinSi
+    
+    Escribir "------------------------------------"
+FinSubProceso
+
+Algoritmo cajero_automatico_team_Ramsey
+    Definir cuentas, saldos, pines Como real
+    Definir historial Como Cadena
+    Dimension cuentas[3], saldos[3], pines[3]
+    Dimension historial[3, 10]  
+    
+    cuentas[0] <- 10012345
+    saldos[0] <- 5000
+    pines[0] <- 1234
+    
+    cuentas[1] <- 10023456
+    saldos[1] <- 3000
+    pines[1] <- 5678
+    
+    cuentas[2] <- 10034567
+    saldos[2] <- 8000
+    pines[2] <- 4321
+    
+    Para i <- 0 Hasta 2 Hacer
+        Para j <- 0 Hasta 9 Hacer
+            historial[i, j] <- ""
+        FinPara
+    FinPara
+    
+    Definir cuentaIngresada, pinIngresado, intentos Como Entero
+    Definir encontrado Como Logico
+    encontrado <- Falso
+    intentos <- 0 
+    
+    Escribir "-----------------------------------------"
+    Escribir "      BIENVENIDO AL CAJERO ATM UCE    "
+    Escribir "-----------------------------------------"
+    
+    Mientras intentos < 3 Y no encontrado Hacer
+        Escribir "Ingrese su número de cuenta:"
+        Leer cuentaIngresada
+        Escribir "Ingrese su PIN:"
+        Leer pinIngresado
+        
+        Para i <- 0 Hasta 2 Hacer
+            Si cuentas[i] = cuentaIngresada Y pines[i] = pinIngresado Entonces
+                encontrado <- Verdadero
+                Escribir "Acceso concedido."
+                Menu(i, saldos, historial)
+            FinSi
+        FinPara
+        
+        Si no encontrado Entonces
+            intentos <- intentos + 1
+            Si intentos < 3 Entonces
+                Escribir "Cuenta o PIN incorrecto. Intento ", intentos, " de 3."
+            FinSi
+        FinSi
+    FinMientras
+    
+    Si no encontrado Entonces
+        Escribir "Tarjeta bloqueada. Demasiados intentos fallidos."
     FinSi
 FinAlgoritmo

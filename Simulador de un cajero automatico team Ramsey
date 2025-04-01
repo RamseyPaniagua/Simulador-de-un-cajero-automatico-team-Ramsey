@@ -4,7 +4,7 @@ SubProceso Menu(posicion, saldos Por Referencia, historial Por Referencia)
     Repetir
 		
         Escribir "------------------------------------"
-        Escribir "          MENU DE OPCIONES         "
+        Escribir "          MENU DE OPCIONES          "
         Escribir "------------------------------------"
         Escribir "1. Consultar saldo"
         Escribir "2. Depositar"
@@ -28,7 +28,7 @@ SubProceso Menu(posicion, saldos Por Referencia, historial Por Referencia)
             4: 
                 MostrarHistorialOperaciones(historial, posicion)
             5: 
-                Escribir "Gracias por usar nuestro cajero. 
+                Escribir "Gracias por usar nuestro cajero , vuelva pronto a la UCE ATM" 
         FinSegun
     Hasta Que opcion = 5  // Repetir hasta que elija salir
 FinSubProceso
@@ -148,7 +148,7 @@ Algoritmo cajero_automatico_team_Ramsey
     intentos <- 0        // Contador intentos
     
     Escribir "-----------------------------------------"
-    Escribir "      BIENVENIDO AL CAJERO ATM UCE    "
+    Escribir "      BIENVENIDO AL UCE ATM   "
     Escribir "-----------------------------------------"
     
     Mientras intentos < 3 Y no encontrado Hacer

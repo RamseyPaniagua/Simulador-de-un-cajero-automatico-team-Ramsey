@@ -38,7 +38,7 @@ SubProceso Menu(posicion, saldos Por Referencia, historial Por Referencia)
             4:   
                 MostrarHistorialOperaciones(historial, posicion)  
             5:   
-                Escribir "Gracias por usar nuestro cajero , vuelva pronto a la UCE ATM"   
+                Escribir "Gracias por usar nuestro cajero , vuelva pronto a ATB"   
         FinSegun  
     Hasta Que opcion = 5  // Repetir hasta que elija salir  
 FinSubProceso  

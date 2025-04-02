@@ -159,12 +159,12 @@ Algoritmo cajero_automatico_team_Ramsey
     encontrado <- Falso  // Bandeja de acceso  
     intentos <- 0        // Contador intentos  
 	
-    Escribir "INTRODUZCA SU TARJETA"  
-	Leer IST
-	
     Escribir "-----------------------------------------"  
     Escribir "         BIENVENIDO A ATB                "  
     Escribir "-----------------------------------------"  
+	
+	Escribir "PRESIONE ENTER PARA CONTINUAR"  
+	Leer EPC
 	
     Mientras intentos < 3 Y no encontrado Hacer  
         Escribir "Ingrese su numero de cuenta:"  

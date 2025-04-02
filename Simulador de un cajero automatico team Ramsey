@@ -5,6 +5,8 @@
 //Luis Eduardo Soto 2023-4118 
 //Ramsey Paniagua 2024-0386 
 
+//cuentas proporcionadas: 10012345 , 10023456 , 10034567
+//pines proporcionados: 1234 , 5678 , 4321
 
 //                SUBPROCESO DEL MENU PRINCIPAL  
 SubProceso Menu(posicion, saldos Por Referencia, historial Por Referencia)  
